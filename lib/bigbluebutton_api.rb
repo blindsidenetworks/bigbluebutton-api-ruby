@@ -726,8 +726,10 @@ module BigBlueButton
           response = http.get(url_parsed.request_uri, @request_headers)
         else
           puts "BigBlueButtonAPI: Sending as a POST request with data.size = #{data.size}" if @debug
-          opts = { 'Content-Type' => 'application/x-www-form-urlencoded' }.merge @request_headers
-          response = http.post(url_parsed.request_uri, data, opts)
+          opts = { 'Content-Type' => 'text/xml' }.merge @request_headers
+          request = Net::HTTP::Post.new(url_parsed.request_uri, opts)
+          request.body = data
+          response = http.request(request)
         end
         puts "BigBlueButtonAPI: URL response = #{response.body}" if @debug
 
